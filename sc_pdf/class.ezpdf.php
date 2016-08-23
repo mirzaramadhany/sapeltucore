@@ -27,7 +27,7 @@ var $cFileCSV   = "" ;
 var $nScTop     = 0 ;
 
 function getText($cValue){
-  $va = array('<b>','</b>','<u>','</u>','"',",") ;
+  $va     = array('<b>','</b>','<u>','</u>','"',",", " \r\n\t\b\f\v\e\\\$\â€™\'\â€ ","\r","\t","\b","\f","â€™","\'","â€","\v","\e","\$") ;
   $cValue = str_replace($va,'',$cValue) ; 
   return $cValue ; 
 }

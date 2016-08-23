@@ -269,7 +269,7 @@
               fwrite($nhd,$c) ;
               $lFirst = false ;
             }
-            $c = '"' . implode('","', str_replace($vaNot, "", $value) ). '"' . chr(13) . chr(10) ;
+            $c = '"' . implode('","', str_replace($vaNot, "",  scSys::CheckText($value) ) ). '"' . chr(13) . chr(10) ;
             fwrite($nhd,$c) ; 
           }
           fclose($nhd) ;

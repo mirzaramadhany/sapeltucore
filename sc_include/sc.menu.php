@@ -90,10 +90,8 @@
 		}
 
 		private static function GetData_Menuchildren($vaReturn,$cmenu_key){
-			$lFound 		= false ;
 			$vaReturn_Menu	= array() ; 
 			if(isset($vaReturn[$cmenu_key]["children"])){ 
-				$lFound 		= true ; 
 				$vaReturn_Menu	= $vaReturn[$cmenu_key]["children"] ; 
 			}else{
 				foreach ($vaReturn as $key => $vavalue) {
@@ -104,6 +102,22 @@
 			}
 			return $vaReturn_Menu ; 
 		} 
+
+		public static function getmenu_json($vamenu,$cmenu_key){
+			$vajson 		= array() ; 
+			foreach ($vamenu as $key => $vadetil) {
+				if(empty($vajson)){
+					if(isset($vadetil["children"])){
+						$vajson 	= self::getmenu_json($vadetil["children"],$cmenu_key) ; 
+					}
+					if( $key == $cmenu_key ){
+						$vajson 	= $vadetil ; 
+						break ; 
+					}
+				}
+			}
+			return $vajson ;
+		}
 
 		public static function GetChildMenu($cJs=""){
             $vaArray 		= array() ;  
