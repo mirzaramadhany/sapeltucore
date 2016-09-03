@@ -12,7 +12,6 @@
         public static function SCLicence($cPerusahaan="SCreativ"){
           echo(' 
             <!-- 
-              #Program by SCreativ Team
               #Customer '.GetSession("SYS_Customer").'
               #Copyright '.$cPerusahaan.'.
             -->
@@ -269,7 +268,7 @@
               fwrite($nhd,$c) ;
               $lFirst = false ;
             }
-            $c = '"' . implode('","', str_replace($vaNot, "",  scSys::CheckText($value) ) ). '"' . chr(13) . chr(10) ;
+            $c = '"' . implode('","', str_replace($vaNot, "", $value) ). '"' . chr(13) . chr(10) ;
             fwrite($nhd,$c) ; 
           }
           fclose($nhd) ;
@@ -512,7 +511,7 @@
                 $cTypeClass = "error" ;
                 $cTitleClass  = "Penolakan" ; 
                 $cIcon        = "fa fa-ban" ; 
-                break; 
+                break;
               default: 
                 $cHtml   = '<strong>Please Review and Execute</strong><br/>' ;
                 $cHtml  .= 'Count : ' . $nRow ;  

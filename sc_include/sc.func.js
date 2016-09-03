@@ -102,7 +102,7 @@ if(typeof vdatetime == 'undefined'){
 		}
 		$.extend(true,cParams,objParams) ; 
 		$(cParams.cClass).datetimepicker({
-		    language:'en' , 
+		    language:'id' , 
 		    pickTime: cParams.lTime
 		}) ; 
 	} 

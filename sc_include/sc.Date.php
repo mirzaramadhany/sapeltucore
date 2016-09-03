@@ -27,7 +27,7 @@
 
 		public static function SetDataDate($lTime=false){
 			$cFormat	= 'DD-MM-YYYY' ; 
-			if($lTime) $cFormat .= ' hh:mm:ss' ;
+			if($lTime) $cFormat .= ' HH:mm:ss' ;
 			echo 'data-date-format="'.$cFormat.'"' ;
 		}
 
