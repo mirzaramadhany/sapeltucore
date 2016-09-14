@@ -1,5 +1,5 @@
 <?php
-include_once('class.pdf.php');
+include_once('class.pdf.php'); 
 
 class Cezpdf extends Cpdf {
   //==============================================================================
@@ -22,9 +22,15 @@ var $ezPages=array();
 var $ezPageCount=0 ;
 var $nPageHeaderLine = 0 ;
 
-var $nExportCSV = 0 ;
-var $cFileCSV   = "" ;
+var $nExport = 0 ; 
+var $cFileCSV   = "" ; 
+var $cFileExcel = "" ;  
 var $nScTop     = 0 ;
+
+var $objPHPExcel = "" ; 
+
+var $nColExcel = "A" ;
+var $nRowExcel = 1 ;
 
 function getText($cValue){
   $va     = array('<b>','</b>','<u>','</u>','"',",", " \r\n\t\b\f\v\e\\\$\â€™\'\â€ ","\r","\t","\b","\f","â€™","\'","â€","\v","\e","\$") ;
@@ -58,6 +64,33 @@ function Export2CSV($vaArray,$lShowHeader=true){
   fclose($nhd) ;
 }
 
+function Export2Excel($vaArray,$lShowHeader=true){ 
+  $lFirst = true ; 
+  foreach($vaArray as $key=>$value){
+    if($lFirst && $lShowHeader){
+      foreach($value as $key1=>$value1){
+        if(trim($this->getText($key1)) !== "") $this->objPHPExcel->getActiveSheet()->setCellValue($this->nColExcel++.$this->nRowExcel,$this->getText($key1)) ;
+      } 
+      $this->nColExcel = "A" ;
+      $this->nRowExcel ++ ;
+      $lFirst = false ; 
+    }
+    foreach($value as $key1=>$value1){
+      if(trim($this->getText($value1)) !== "") $this->objPHPExcel->getActiveSheet()->setCellValue($this->nColExcel++.$this->nRowExcel,$this->getText($value1)) ;
+    }  
+    $this->nColExcel = "A" ;
+    $this->nRowExcel ++ ; 
+  }
+}
+
+function CreateFileExcel($cExtention = '.xlsx'){
+  $cDir = "../tmp" ;
+  if(!is_dir($cDir)) mkdir($cDir) ;
+  $this->cFileExcel = $cDir . "/file" . md5(rand(0,10000) . session_id() . time()) . $cExtention ;
+
+  if(is_file($this->cFileExcel)) unlink($this->cFileExcel) ;
+}
+
 function CreateFileExport($cExtention = '.csv'){
   $cDir = "../tmp" ;
   if(!is_dir($cDir)) mkdir($cDir) ;
@@ -83,16 +116,22 @@ function Cezpdf($paper='LETTER',$orientation='portrait',$vaOption=array(),$pagen
   $nLeftMargin      = 1.3 ;
   $nBottomMargin    = 1 ;
   $nRightMargin     = 0.7 ;
-  $this->nExportCSV       = 0 ; 
+  $this->nExport       = 0 ;  
+  $this->objPHPExcel = new PHPExcel();  
 
   if(!empty($vaOption)){
     if(isset($vaOption['nOpt_MTop']))  $nTopMargin       = $vaOption['nOpt_MTop']/10 ;
     if(isset($vaOption['nOpt_MLeft'])) $nLeftMargin      = $vaOption['nOpt_MLeft']/10 ;
     if(isset($vaOption['nOpt_MBottom']))  $nBottomMargin    = $vaOption['nOpt_MBottom']/10 ;
     if(isset($vaOption['nOpt_MRight']))  $nRightMargin     = $vaOption['nOpt_MRight']/10 ; 
-    $this->nExportCSV = isset($vaOption['nOpt_CSV']) ? 1 : 0 ;
+    $this->nExport = $vaOption['nOpt_CSV'] ;
   }  
-  if(!empty($this->nExportCSV)) $this->CreateFileExport() ;
+
+  if($this->nExport == "1"){
+    $this->CreateFileExport() ;
+  }else if($this->nExport == "2"){
+    $this->CreateFileExcel() ;
+  } 
 
   if($orientation == "P") $orientation = "portrait" ;
   if($orientation == "L") $orientation = "landscape" ;
@@ -498,12 +537,27 @@ function ezPRVTcleanUp(){
 
 /**************************************************************************************************************************************************************************************************/
 function ezStream($options=''){
-  if(empty($this->nExportCSV)){
+  if($this->nExport == 0){
     $this->ezPRVTcleanUp();
     $this->stream($options);
-  }else{
+  }else if($this->nExport == 1){
     echo('<a href="' . $this->cFileCSV . '" style="text-align:center">Click Here</a> to download file CSV') ;
-  } 
+  } else if($this->nExport == 2){
+    //AUTO SIZE
+    $col = 'A';
+    while(true){
+        $tempCol = $col++;
+        $this->objPHPExcel->getActiveSheet()->getColumnDimension($tempCol)->setAutoSize(true);
+        if($tempCol == $this->objPHPExcel->getActiveSheet()->getHighestDataColumn()){ 
+            break;
+        }
+    }
+    //******
+
+    $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel2007');
+    $objWriter->save($this->cFileExcel); 
+    echo('<a href="' . $this->cFileExcel . '" style="text-align:center">Click Here</a> to download file XLSX') ;
+  }
 }
 
 /**************************************************************************************************************************************************************************************************/
@@ -708,9 +762,13 @@ function ezProcessText($text){
 
 /**************************************************************************************************************************************************************************************************/
 function ezText($text,$size=10,$options=array(),$test=0){
-  if($this->nExportCSV == 1){
+  if($this->nExport == 1){
     $va1 [0] = array(""=>$text) ; 
     $this->Export2CSV($va1,false) ;
+    return true ;
+  }else if($this->nExport == 2){
+    $va1 [0] = array(""=>$text) ; 
+    $this->Export2Excel($va1,false) ; 
     return true ;
   } 
   // this will add a string of text to the document, starting at the current drawing
@@ -1080,8 +1138,11 @@ function ezTable(&$data,$cols='',$title='',$options=''){
   }
 
   // Export To CSV
-  if($this->nExportCSV == 1){
+  if($this->nExport == 1){
     $this->Export2CSV($data,$options ['showHeadings'] == 1) ;
+    return true ; 
+  }else if($this->nExport == 2){
+    $this->Export2Excel($data,$options ['showHeadings'] == 1) ; 
     return true ; 
   }
 
@@ -1639,9 +1700,13 @@ function ezTable(&$data,$cols='',$title='',$options=''){
 
 // Function Sapeltu didasari dari fungsi Assist thanks assist
 function ezHeader($cText,$vaOption = ''){
-  if($this->nExportCSV == 1){
+  if($this->nExport == 1){
     $va1 [0] = array(""=>$cText) ;
     $this->Export2CSV($va1,false) ;
+    return true ;
+  }else if($this->nExport == 2){
+    $va1 [0] = array(""=>$cText) ;
+    $this->Export2Excel($va1,false) ; 
     return true ;
   }
   $vaDefault = array('fontSize'=>10,'justification'=>'center','newLine'=>true,'width'=>100) ;
@@ -1713,6 +1778,16 @@ function ezLogoHeaderPage($cLoc,$nLeft=0,$nTop=0,$nWidth=0,$nHeight=0){
     }
   
     $this->ezStartPageNumbers($nLeft,$nTop,8,'left',$cLoc,0,array("lImage"=>true,"nWidth"=>$nWidth,"nHeight"=>$nHeight)) ; 
+
+    //EXPORT TO EXCEL
+    $objDrawing = new PHPExcel_Worksheet_Drawing();
+    $objDrawing->setName('Gambar'); 
+    $objDrawing->setPath($cLoc); 
+    $objDrawing->setHeight($nHeight);
+    $objDrawing->setWidth($nWidth); 
+    $objDrawing->setOffsetX($nLeft); 
+    $objDrawing->setOffsetY($nTop);  
+    $objDrawing->setWorksheet($this->objPHPExcel->getActiveSheet());
   }
 } 
 
