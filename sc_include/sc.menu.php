@@ -60,7 +60,6 @@
 					$vaReturn_Menu 	= self::GetData_Menuchildren($vaReturn,$cmenu_key_set) ; 
 				} 
 			}
-
 			return $vaReturn_Menu ;  
 
 		}
@@ -103,7 +102,7 @@
 			return $vaReturn_Menu ; 
 		} 
 
-		public static function getmenu_json($vamenu,$cmenu_key){
+		public static function getmenu_json($vamenu,$cmenu_key,$lchildern=false){
 			$vajson 		= array() ; 
 			foreach ($vamenu as $key => $vadetil) {
 				if(empty($vajson)){
@@ -111,7 +110,12 @@
 						$vajson 	= self::getmenu_json($vadetil["children"],$cmenu_key) ; 
 					}
 					if( $key == $cmenu_key ){
-						$vajson 	= $vadetil ; 
+						
+						if($lchildern && isset($vadetil['children'])){
+							$vajson 	= $vadetil['children'] ; 	
+						}else{
+							$vajson 	= $vadetil ; 	
+						}
 						break ; 
 					}
 				}
