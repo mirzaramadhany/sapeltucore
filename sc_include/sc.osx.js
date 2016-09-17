@@ -503,8 +503,8 @@ scOSX.LoadPage 	= function(cID,cPage,cParam,lReport){
 
 /*costanta*/
 var constant	= {} ; 
-constant.Save 	= "Saving? " ; 
-constant.Delete	= "Delete Data?" ;
+constant.saving 	= "Saving? " ; 
+constant.deleting	= "Delete Data?" ;
 
 //console log
 scOSX.console	= "-- Bismillah Sukses Team --" ; 
