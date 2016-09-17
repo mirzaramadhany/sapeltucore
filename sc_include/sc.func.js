@@ -109,9 +109,11 @@ if(typeof vdatetime == 'undefined'){
 }
  
 scForm.InitSelect	= function(objParams){
+	scForm.select2_curl	= './pages/ajaxload/proload.ajax.php' ;
+	if(corejs_v == 2) scForm.select2_curl = './module/ajaxload/proload.ajax.php' ;
 	var cParams		= {
 		cClass		: ".sc-input-select" ,
-		cUrl 		: "./pages/ajaxload/proload.ajax.php" ,
+		cUrl 		: scForm.select2_curl ,
 		lMulti		: false  ,
 		allowClear	: false ,
 		minimumInputLength	: 0 ,
