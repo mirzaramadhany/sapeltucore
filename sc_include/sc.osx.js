@@ -89,7 +89,7 @@ scOSX.Form 		= function(Form_Var){
 		scOSX.cHtml	   +=	                     	'<tr>';
 		if(scOSX.Form_Var.lHelp){
 			scOSX.cHtml	   +=	                       	'<td>';
-			scOSX.cHtml	   +=	                        	'<div class="btn-help" title="Bantuan"';
+			scOSX.cHtml	   +=	                        	'<div class="btn-help" title="Help"';
 			scOSX.cHtml    += 								 'onclick="'+scOSX.ObjForm+'.OnHelp(event)">';
 			scOSX.cHtml	   +=	                            	'<i class="fa fa-question-circle"></i>';
 			scOSX.cHtml	   +=	                            '</div>'; 
@@ -133,9 +133,8 @@ scOSX.Form 		= function(Form_Var){
 		scOSX.cHtml	   +=		'ID 	: "'+ scOSX.cID +'" , ';
 		scOSX.cHtml	   +=		'ID_Load: "'+ scOSX.cID2Load +'" , ';
 		scOSX.cHtml	   +=		'Obj 	: $("#'+ scOSX.cID +'") , ';
-		scOSX.cHtml	   +=		'Url_F 	: "./pages/'+ scOSX.Form_Var.cJs +'" , ';
-		scOSX.cHtml	   +=		'Url_A 	: "./pages/'+ scOSX.Form_Var.cJs.split(".")[0] +'.ajax.php" , ';
-		scOSX.cHtml	   +=		'Url 	: "'+ scOSX.Form_Var.cJs +'" , '; 
+		scOSX.cHtml	   +=		'Url_F 	: "'+ scOSX.Form_Var.cJs +'" , ';
+		scOSX.cHtml	   +=		'Url_A 	: "'+ scOSX.Form_Var.cJs +'.ajax.php" , ';
 		scOSX.cHtml	   +=		'OnMinimize	: function(){ scOSX.OnMinimize("'+ scOSX.cID +'") } , ';
 		scOSX.cHtml	   +=		'OnMaximize	: function(){ scOSX.OnMaximize("'+ scOSX.cID +'") } , ';
 		scOSX.cHtml	   +=		'OnClose	: function(){ scOSX.OnClose("'+ scOSX.cID +'","'+ scOSX.ObjForm +'") } , ';
@@ -180,7 +179,7 @@ scOSX.OnHelp			= function(e,cUrl,cFormName){
 	e.stopPropagation() ; 
 	e.preventDefault() ; 
 	scOSX.Form({ 
-		cNama 		: "Bantuan" ,
+		cNama 		: "Help" ,
 		cJs 		: "help/" + cUrl ,
 		cFormName	: cFormName + '_helpme',
 		nWidth 		: 500 ,   
@@ -504,15 +503,9 @@ scOSX.LoadPage 	= function(cID,cPage,cParam,lReport){
 
 /*costanta*/
 var constant	= {} ; 
-constant.Save 	= "Simpan Data ? " ; 
-constant.Delete	= "Hapus Data ?" ;
+constant.Save 	= "Saving? " ; 
+constant.Delete	= "Delete Data?" ;
 
 //console log
-scOSX.console 	 =   " ossssssssso   \t   occccccccccccccc" ;
-scOSX.console	+= "\nosssss         \t  occcccccccccccc" ;
-scOSX.console	+= "\nosssss         \t occco" ;
-scOSX.console	+= "\n osssssssssso  \toccco" ; 
-scOSX.console	+= "\n        ssssso \t occco" ; 
-scOSX.console	+= "\n        ssssso \t  occcccccccccccc" ; 
-scOSX.console	+= "\nossssssssssso  \t   occccccccccccccc screativ.com th .2015 by amir.ramadhany@gmail.com and team" ; 
+scOSX.console	= "-- Bismillah Sukses Team --" ; 
 console.log(scOSX.console) ; 
