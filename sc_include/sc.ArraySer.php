@@ -91,6 +91,10 @@
           	}else if(SYSCORE_VER == "1.0.0"){  //versi desktop new
 	          	$vaArray['cNama']   	= isset($va[0]) ? $va[0] : "" ; 
 				$vaArray['cJs']     	= isset($va[1]) ? $va[1] : "" ;
+				if($cPath !== "" && $vaArray['cJs'] !== ""){//module
+					$vaArray['cJs']		= $cPath . "pages/" . $vaArray['cJs'] ; 
+					$va[1]				= $vaArray['cJs'] ; 
+				}
 				$vaArray['cIcon']   	= isset($va[2]) ? ($va[2] !== "" ? $va[2] : "fa fa-folder-open-o") : "fa fa-folder-open-o" ;
 				$vaArray['cMd5']  		= $va[1] !== "" ? md5($va[1]) : md5($va[3]) ; 
 				$vaArray['cFormName']	= isset($va[3]) ? $va[3] : "" ;
