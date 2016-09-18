@@ -11,7 +11,7 @@
 
 var scForm	= {} ; 
 var scForm	= {} ;  
-
+var corejs_v= 1 ;
 scForm.CheckPhone		= function(vaNumber){ 
 	scForm.lValidNumber 		= false ; 
 	scForm.lValidNumber1 		= false ; 
