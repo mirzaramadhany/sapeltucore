@@ -102,12 +102,14 @@ scOSX.Form 		= function(Form_Var){
 			scOSX.cHtml	   +=	                            	'<img src="./images/title/minimize-8.png">';
 			scOSX.cHtml	   +=	                            '</div>'; 
 			scOSX.cHtml	   +=	                        '</td>';
-			scOSX.cHtml	   +=	                        '<td>';
-			scOSX.cHtml	   +=	                           	 '<div class="btn-circle btn-maximize transition"' ;
-			scOSX.cHtml    += 								 'onclick="'+scOSX.ObjForm+'.OnMaximize()">';
-			scOSX.cHtml	   +=	                             	'<img src="./images/title/maximize-8.png">';
-			scOSX.cHtml	   +=	                             '</div>';
-			scOSX.cHtml	   +=	                        '</td>';
+			if(scOSX.Form_Var.lResize){
+				scOSX.cHtml	   +=	                    '<td>';
+				scOSX.cHtml	   +=	                    	'<div class="btn-circle btn-maximize transition"' ;
+				scOSX.cHtml    += 							'onclick="'+scOSX.ObjForm+'.OnMaximize()">';
+				scOSX.cHtml	   +=	                             '<img src="./images/title/maximize-8.png">';
+				scOSX.cHtml	   +=	                        '</div>';
+				scOSX.cHtml	   +=	                    '</td>';
+			}
 		}
 		scOSX.cHtml	   +=	                            '<td>';
 		scOSX.cHtml	   +=	                             	'<div class="btn-circle btn-close transition" onclick="'+scOSX.ObjForm+'.OnClose()">';
@@ -134,7 +136,7 @@ scOSX.Form 		= function(Form_Var){
 		scOSX.cHtml	   +=		'ID_Load: "'+ scOSX.cID2Load +'" , ';
 		scOSX.cHtml	   +=		'Obj 	: $("#'+ scOSX.cID +'") , ';
 		scOSX.cHtml	   +=		'Url_F 	: "'+ scOSX.Form_Var.cJs +'" , ';
-		scOSX.cHtml	   +=		'Url_A 	: "'+ scOSX.Form_Var.cJs +'.ajax.php" , ';
+		scOSX.cHtml	   +=		'Url_A 	: "'+ scOSX.Form_Var.cJs.replace('.add','') +'.ajax.php" , ';
 		scOSX.cHtml	   +=		'OnMinimize	: function(){ scOSX.OnMinimize("'+ scOSX.cID +'") } , ';
 		scOSX.cHtml	   +=		'OnMaximize	: function(){ scOSX.OnMaximize("'+ scOSX.cID +'") } , ';
 		scOSX.cHtml	   +=		'OnClose	: function(){ scOSX.OnClose("'+ scOSX.cID +'","'+ scOSX.ObjForm +'") } , ';
