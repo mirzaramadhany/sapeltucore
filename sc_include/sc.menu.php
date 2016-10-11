@@ -28,9 +28,9 @@
 						$vakey_pos 	= array() ;  
 						$vaSet 		= array() ; 
 						foreach ($vaFile as $ckeyfile => $cvalue) {
-							$cIdentifier   = strpos($cvalue, "#") ; 
-			                if($cIdentifier === false && trim($cvalue) !== "" &&   
-			                strpos($cvalue, "<?php die('Sapeltu Inc.'); ?>") !== 0){
+							$cIdentifier   	= strpos($cvalue, "#") ; 
+							$lphp 			= strpos($cvalue, "<?php") ; 
+			                if($cIdentifier === false && trim($cvalue) !== "" && $lphp === false){
 
 			                	$nPos           = strpos($cvalue,"[") ;    
 								$vaMenu         = scArray::Menu2Array($cvalue,$cPath,$cmodul_name) ;  

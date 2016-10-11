@@ -382,42 +382,7 @@
               return self::Terbilang($x / 1000) . " Ribu" . self::Terbilang($x % 1000) ;
             elseif ($x < 1000000000)
               return self::Terbilang($x / 1000000) . " Juta" . self::Terbilang($x % 1000000) ; 
-        }  
-
-        public static function GetAvatar(){
-          $cReturn  = "./images/avatar5.png" ; 
-          $cFoto    = GetSession("cSession_Foto") ;
-          if(is_file($cFoto)) $cReturn  = $cFoto ."?lastmod=" . time() ; 
-           
-          return $cReturn ; 
-        }
-
-        public static function GetCabangUser($cUserName=''){
-          $cCabang      = GetSession("cSession_Cabang") ; 
-          if($cCabang   == ""){
-            if($cUserName == "") $cUserName = GetSession("cSession_UserName") ;
-            $cCabang    = scSys::GetKeteranganOne("Cabang","UserName = '$cUserName'","username") ;
-            if($cCabang == "") $cCabang     = scSys::GetCabangInduk() ; 
-            SaveSession("cSession_Cabang",$cCabang) ; 
-          }  
-
-          return $cCabang ; 
-        }
-
-        public static function GetCabang($cUserName){
-          $cCabang    = scSys::GetKeteranganOne("Cabang","UserName = '$cUserName'","username") ;
-          if($cCabang == "") $cCabang     = scSys::GetCabangInduk() ; 
-          return $cCabang ; 
-        }
-
-        public static function GetCabangInduk(){
-          $cCabang      = GetSession("cSession_CabangInduk") ; 
-          if($cCabang   == ""){
-            $cCabang    = scSys::GetConfig("Sys_CabangInduk") ; 
-            SaveSession("cSession_CabangInduk",$cCabang) ; 
-          }    
-          return $cCabang ; 
-        }
+        } 
  
         public static function DefaultSys(){$vaArray=array();$vaArray['author']="amir.ramadhany@gmail.com";$vaArray['auth']="Sap2134";return $vaArray;}     
 
@@ -435,29 +400,6 @@
           }
           $cLastString  .= $cString . chr(13) ; 
           @file_put_contents($cLoc . $cFileName, $cLastString) ; 
-        }
-
-        public static function SaveFoto($vaFoto,$cDestinationLast="../tmp/foto/",$cDestination="../tmp/pelanggan_data/",$cKode="",$lDeleteLast=true){
-          scDir::CreateDir($cDestination) ; 
-          $vaFotoSave       = array() ;  
-          $nRow             = 0 ; 
-          foreach ($vaFoto as $cKey => $cFoto) {
-            if(is_file($cFoto)){
-              $cFoto_Desti  = str_replace($cDestinationLast,$cDestination, $cFoto) ; 
-              if($cKode !== ""){
-                $vaFile     = pathinfo($cFoto) ;
-                $cFileName  = $vaFile['filename'] ; 
-                $cFoto_Desti= str_replace($cFileName, $cKode."@".(time() + $nRow) , $cFoto_Desti) ;
-              } 
-              if($cFoto_Desti !== $cFoto){ 
-                copy($cFoto, $cFoto_Desti) ; 
-                if($lDeleteLast) @unlink($cFoto) ; 
-              }  
-              $vaFotoSave[] = $cFoto_Desti ; 
-            } 
-            $nRow++ ; 
-          }
-          return $vaFotoSave ; 
         }
 
         public static function SetKey($s,$lSpace=true){
@@ -483,74 +425,6 @@
         public static function RemoveSpecialChar($cText){
           $vaArray  = array("'",'"',"#","$",";","{","}","\\","/",".") ;
           return str_replace($vaArray, "", $cText) ; 
-        }
-
-
-        public static function InitNotification($cType,$nRow,$cTitle,$cPage,$cId,$nKe,$cIconIo,$cIcon=""){//pdam
-          if($nRow > 0){
-            $cTypeClass   = "info" ; 
-            $cTitleClass  = "" ;
-            $cIcon        = "fa fa-info" ;
-            switch ($cType) {
-              case 0:
-                $cHtml   = '<strong>Permintaan Pemeriksaan</strong><br/>' ;
-                $cHtml  .= 'Jumlah : ' . $nRow ; 
-                $cHtml  .= '<br />Mohon segera dikonfirmasi, terimakasih' ;  
-                $cTitleClass  = "Permintaan Permeriksaan" ;
-                break;
-              case 1:
-                $cHtml   = '<strong>Permintaan Persetujuan</strong><br/>' ;
-                $cHtml  .= 'Jumlah : ' . $nRow ; 
-                $cHtml  .= '<br />Mohon segera dikonfirmasi, terimakasih' ;  
-                $cTitleClass  = "Permintaan Persetujuan" ;
-                break;
-              case 3:
-                $cHtml   = '<strong>Penolakan</strong><br/>' ;
-                $cHtml  .= 'Jumlah : ' . $nRow ; 
-                $cHtml  .= '<br />Mohon diteliti kembali , terimakasih' ;  
-                $cTypeClass = "error" ;
-                $cTitleClass  = "Penolakan" ; 
-                $cIcon        = "fa fa-ban" ; 
-                break;
-              default: 
-                $cHtml   = '<strong>Please Review and Execute</strong><br/>' ;
-                $cHtml  .= 'Count : ' . $nRow ;  
-                $cTitleClass  = $cTitleClass ;
-                break;
-            }
-            
-            echo('  
-                new PNotify({
-                            title: "'.$cTitle.'", 
-                            text: "'.$cHtml.'", 
-                            type: "'.$cTypeClass.'",
-                            icon: "'.$cIcon.'", animation : "slide" ,
-                            before_open: function(PNotify){
-                                $("#wrapAudioNotif")[0].play();
-                            },buttons: {
-                        closer: false
-                      }
-                        })
-                .get().click(function(){ 
-                            ChangePage("#'.$cPage.'") ;
-                        }) ; 
-              ') ; 
-            //add to notif top
-            $cHtml      = '<li id="notifTop-'.$cId.$nKe.'">  
-                      <a href="#" onClick="ChagePage(&quot;#'.$cPage.'&quot;)">
-                      <i class="ion '.$cIconIo.'"></i>'.$nRow.' '.$cTitleClass.' '.$cTitle.'</a></li>' ; 
-               
-            echo(' 
-                $("#oNotif_Body").find("#notifTop-'.$cId.$nKe.'").remove() ; 
-                $("#oNotif_Body").prepend("'. scSys::CheckText($cHtml) .'") ; 
-              ') ;   
-          }else{
-            echo('$("#oNotif_Body").find("#notifTop-'.$cId.$nKe.'").remove() ; ') ;
-          }
-        } 
-
-        public static function Pdam_SingKlas($cKlas,$lLama=false){
-          return pdam::Pdam_SingKlas($cKlas,$lLama) ; 
         }
 
         public static function GenerateThumbnail($im_filename,$th_filename,$max_width,$max_height,$quality = 0.75){

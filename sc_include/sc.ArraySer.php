@@ -9,61 +9,9 @@
 	     file                : sc.ArraySer.php
 	*/ 
 	class scArray{ 
-		public static function Array2Ser($vaArray){
-			return serialize($vaArray) ; 
-		}
-
-		public static function Ser2Array($cLong,$vaDefault=array()){
-			$vaArray	= $vaDefault ;  
-			if(trim($cLong) !== ""){
-				$vaArray= unserialize($cLong) ; 
-			}
-			return $vaArray ; 
-		}  
-
-		public static function Array2ObjArray($va){
-			$cString  = "[" ;
-			self::Array2Obj($va,$cString) ; 
-			$cString .= "]" ;   
-			$vaString  = explode("}",$cString) ; 
-			if(count($vaString) > 1){
-				$cString  = implode("},", $vaString) ; 	
-			}
-			
-			return $cString ;    
-		} 
-
-		public static function Array2Obj($va,&$cText){
-			$lArray 	= false ; 
-			$nLength	= count($va) - 1 ; 
-			$cHtml 	   	= "" ; 
-			foreach ($va as $cKey => $cValue) {
-				if(is_array($cValue)){
-					self::Array2Obj($cValue,$cText) ; 
-				}else{
-					$lArray	 = true ; 
-					$cValue	 = is_string($cValue) ? "\"". $cValue ."\"" : $cValue ; 
-					$cHtml	.= $cKey . ":" . $cValue ;  
-					if($nRow < $nLength){
-						$cHtml.= "," ;  
-					}  
-					$nRow++ ; 
-				}
-			}
-			if($lArray){ 
-				$cText	.= "{" . $cHtml . "}" ;		
-			} 
-		} 
-
-		public static function Array2Var($va){
-			foreach ($va as $cKey => $cValue) {  
-				eval(" \${$cKey} = '{$cValue}';") ;   
-			}           
-		}
-
 		public static function Menu2Array($cMenu,$cPath="",$cmodul_name=""){ 
 			$vaArray  = array("cNama"=>"","cJs"=>"","cIcon"=>"","cMd5"=>0,"cFormName"=>"") ; 
-			eval('$va = array' . str_replace("[","(", str_replace("]",")",$cMenu)) . ';' ) ; //eval to array            
+			eval('$va = array' . str_replace("[","(", str_replace("]",")",$cMenu)) . ';' ) ; //eval to array     
 			//set to Array 
           	if(SYSCORE_VER == "0.0.1"){//versi lawas
 				$vaArray['cNama'] = isset($va[0]) ? $va[0] : "" ; 
@@ -104,6 +52,10 @@
 				$vaArray['lResize']		= isset($va[7]) ? $va[7] : true ;
 				$vaArray['lModal']		= isset($va[8]) ? $va[8] : false ;
 				$vaArray['lFrame']		= isset($va[9]) ? $va[9] : false ;
+				$vaArray['lDock']		= isset($va[10]) ? $va[10] : true ;
+				$vaArray['cHeaderClass']	= isset($va[11]) ? $va[11] : "" ;
+				$vaArray['cBodyClass']		= isset($va[12]) ? $va[12] : "" ;
+				$vaArray['lHelp']		= isset($va[13]) ? $va[13] : false ;
 			}else if(SYSCORE_VER == "2.0.0"){ //versi mobile new
           		$vaArray['cNama']   	= isset($va[0]) ? $va[0] : "" ; 
 				$vaArray['cJs']     	= isset($va[1]) ? $va[1] : "" ;

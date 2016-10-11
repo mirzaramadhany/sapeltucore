@@ -12,7 +12,8 @@ class myDb extends PDO {
 	private $cError		= "" ; 
 	private $cLog 		= "" ; 
 	private $lShowError	= true ;
-	private $cSqlMe		= "" ;  
+	private $cSqlMe		= "" ; 
+	private $liid 		= 0 ;  
  	
  	public function __construct(){}
 
@@ -59,7 +60,7 @@ class myDb extends PDO {
 				$cField	.= $cKey . "," ; 		
 				$cValue	.= "'$cValues'," ; 
 			}
-			$cField	= substr($cField,0, strlen($cField) - 1) ;
+			$cField	= substr($cField,0, strlen($cField) - 1) ; 
 			$cField	= "($cField)" ; 
 			
 			$cValue	= substr($cValue,0, strlen($cValue) - 1) ; 	
@@ -147,7 +148,7 @@ class myDb extends PDO {
 	} 
 
 	public function InsertID(){ 
-		return parent::lastInsertId() ; 
+		return $this->liid ; 
 	} 
 
 	public function Rows($dbData){
@@ -207,6 +208,9 @@ class myDb extends PDO {
 			try {
 				$dbData			= parent::prepare($cQuery) ; 
 				$dbData->execute() ;   
+				if( strpos($cQuery, "log") === false ){
+					$this->liid 	= parent::lastInsertId() ; 
+				}     
 				return $dbData ; 
 			} catch (PDOException $e) {
 				$this->cError	= $e->getMessage() ;	

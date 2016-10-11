@@ -124,6 +124,7 @@ function Cezpdf($paper='LETTER',$orientation='portrait',$vaOption=array(),$pagen
     if(isset($vaOption['nOpt_MLeft'])) $nLeftMargin      = $vaOption['nOpt_MLeft']/10 ;
     if(isset($vaOption['nOpt_MBottom']))  $nBottomMargin    = $vaOption['nOpt_MBottom']/10 ;
     if(isset($vaOption['nOpt_MRight']))  $nRightMargin     = $vaOption['nOpt_MRight']/10 ; 
+    if(!isset($vaOption['nOpt_CSV'])) $vaOption['nOpt_CSV'] = 0 ; 
     $this->nExport = $vaOption['nOpt_CSV'] ;
   }  
 

@@ -33,16 +33,16 @@ scOSX.Form 		= function(Form_Var){
 		cIcon 		: 'fa fa-cloud' ,
 		cBodyClass	: '' ,
 		cHeaderClass: '' ,
-		lHelp	 	: true 
+		lHelp	 	: false 
 	}
 	$.extend(true,scOSX.Form_Var,Form_Var) ;
 	
-	scOSX.Form_Var.nHeight	= scOSX.Form_Var.nHeight == "max" ? scOSX.vaPosWin.nTop-60 : scOSX.Form_Var.nHeight ; 
+	scOSX.Form_Var.nHeight	= scOSX.Form_Var.nHeight == "max" ? scOSX.vaPosWin.nTop-100 : scOSX.Form_Var.nHeight ; 
 	scOSX.Form_Var.nWidth	= scOSX.Form_Var.nWidth == "max" ? scOSX.vaPosWin.nLeft-30 : scOSX.Form_Var.nWidth ; 
 
 	/*set postion form*/
 	if(scOSX.Form_Var.nWidth <= 300) scOSX.Form_Var.nWidth	= 350 ; 
-	scOSX.Form_Var.nTop		= Math.max(0,(scOSX.vaPosWin.nTop - scOSX.Form_Var.nHeight) / 2 ) ;
+	scOSX.Form_Var.nTop		= Math.max(0,(scOSX.vaPosWin.nTop - scOSX.Form_Var.nHeight) / 2 )-10 ;
 	scOSX.Form_Var.nLeft	= Math.max(0,(scOSX.vaPosWin.nLeft - scOSX.Form_Var.nWidth) / 2 ) ; 
 	if( scOSX.Form_Var.nTop > scOSX.vaPosWin.nTop) scOSX.Form_Var.nTop = scOSX.vaPosWin.nTop ; 
 	if( scOSX.Form_Var.nLeft > scOSX.vaPosWin.nLeft) scOSX.Form_Var.nLeft = scOSX.vaPosWin.nLeft ; 
@@ -79,7 +79,7 @@ scOSX.Form 		= function(Form_Var){
 	scOSX.cHtml		   += 	'<div class="os-form-wrap" id="'+ scOSX.cID +'_wrap">' ;
 	if(scOSX.Form_Var.lTitleBar){
 		scOSX.cID2Load 	= scOSX.cID + "_body" ; 		
-		scOSX.cHtml	   +=		'<div class="header active '+ scOSX.Form_Var.cHeaderClassae +'" id="'+ scOSX.cID +'_title">';
+		scOSX.cHtml	   +=		'<div class="header active '+ scOSX.Form_Var.cHeaderClass +'" id="'+ scOSX.cID +'_title">';
 		scOSX.cHtml	   +=			'<table class="header-table">';
 		scOSX.cHtml	   +=	        	'<tr>';
 		scOSX.cHtml	   +=	             	'<td class="icon" >'+ scOSX.Form_Var.cIcon +'</td>';
@@ -342,28 +342,32 @@ scOSX.OpenReport 		= function(oObj,lConfig,cData,cEncrypt){
 	if(!cEncrypt) cEncrypt	= "" ; 
 	if(lConfig == undefined) lConfig = true ;
 	if(lConfig){
-		scOSX.Form({ 
-			cNama 		: "Report Setting" ,
-			cJs 		: "laporan/rptset&scRpt="+ oObj +"&" + cData ,
-			cFormName	: "sc_report",   
-			nWidth 		: 550 ,   
-			nHeight 	: 300 , 
-			cIcon 		: 'fa fa-file' ,
-			lDock 		: false, 
-			lModal		: true,
-			lHelp		: false
-		}) ; 
+		setTimeout(function(){
+			scOSX.Form({ 
+				cNama 		: "Report Setting" ,
+				cJs 		: "module/ajaxload/rpt&scRpt="+ oObj +"&" + cData ,
+				cFormName	: "sc_report",    
+				nWidth 		: 550 ,   
+				nHeight 	: 300 , 
+				cIcon 		: 'fa fa-file' ,
+				lDock 		: false, 
+				lModal		: true,
+				lHelp		: false
+			}) ; 
+		},1)
 	}else{
-		scOSX.Form({
-			cNama 		: "Report" ,
-			cJs 		: "./sc.reportme.php?scRpt=" + oObj + "&" + cData ,
-			cFormName	: "scopen_report" + cEncrypt,  
-			cIcon 		: 'fa fa-file' ,
-			lDock 		: false, 
-			lModal		: true ,
-			lFrame		: true ,
-			lHelp		: false
-		}) ; 
+		setTimeout(function(){
+			scOSX.Form({
+				cNama 		: "Report" ,
+				cJs 		: "./sc.reportme.php?scRpt=" + oObj + "&" + cData ,
+				cFormName	: "scopen_report" + cEncrypt,  
+				cIcon 		: 'fa fa-file' ,
+				lDock 		: false, 
+				lModal		: true ,
+				lFrame		: true ,
+				lHelp		: false
+			}) ; 
+		},1) ;
 	}
 }
  
