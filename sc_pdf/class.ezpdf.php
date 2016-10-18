@@ -22,15 +22,14 @@ var $ezPages=array();
 var $ezPageCount=0 ;
 var $nPageHeaderLine = 0 ;
 
-var $nExport = 0 ; 
-var $cFileCSV   = "" ; 
-var $cFileExcel = "" ;  
+var $nExport = 0 ;  
+var $cfileexport = "" ;  
 var $nScTop     = 0 ;
 
 var $objPHPExcel = "" ; 
 
 var $nColExcel = "A" ;
-var $nRowExcel = 1 ;
+var $nRowExcel = 1 ; 
 
 function getText($cValue){
   $va     = array('<b>','</b>','<u>','</u>','"',",", " \r\n\t\b\f\v\e\\\$\â€™\'\â€ ","\r","\t","\b","\f","â€™","\'","â€","\v","\e","\$") ;
@@ -39,7 +38,7 @@ function getText($cValue){
 }
 
 function Export2CSV($vaArray,$lShowHeader=true){
-  $nhd = fopen($this->cFileCSV,"a") ;
+  $nhd = fopen($this->cfileexport,"a") ;
   $lFirst = true ;
   foreach($vaArray as $key=>$value){
     if($lFirst && $lShowHeader){
@@ -83,20 +82,13 @@ function Export2Excel($vaArray,$lShowHeader=true){
   }
 }
 
-function CreateFileExcel($cExtention = '.xlsx'){
+function CreateFileExport($cExtention = '.csv', $export_name=""){
   $cDir = "../tmp" ;
   if(!is_dir($cDir)) mkdir($cDir) ;
-  $this->cFileExcel = $cDir . "/file" . md5(rand(0,10000) . session_id() . time()) . $cExtention ;
+  if($export_name == "") $export_name   = "export" . md5(rand(0,10000) . session_id() . time()) ;
+  $this->cfileexport = $cDir . "/" . $export_name  . $cExtention ; 
 
-  if(is_file($this->cFileExcel)) unlink($this->cFileExcel) ;
-}
-
-function CreateFileExport($cExtention = '.csv'){
-  $cDir = "../tmp" ;
-  if(!is_dir($cDir)) mkdir($cDir) ;
-  $this->cFileCSV = $cDir . "/file" . md5(rand(0,10000) . session_id() . time()) . $cExtention ;
-
-  if(is_file($this->cFileCSV)) unlink($this->cFileCSV) ;
+  if(is_file($this->cfileexport)) unlink($this->cfileexport) ;
 }
 
 function Cezpdf($paper='LETTER',$orientation='portrait',$vaOption=array(),$pagenumber='1',$nPaperIncWidth=0,$nPaperIncHeight=0){
@@ -129,9 +121,9 @@ function Cezpdf($paper='LETTER',$orientation='portrait',$vaOption=array(),$pagen
   }  
 
   if($this->nExport == "1"){
-    $this->CreateFileExport() ;
+    $this->CreateFileExport(".csv", $vaOption['export_name']) ;
   }else if($this->nExport == "2"){
-    $this->CreateFileExcel() ;
+    $this->CreateFileExport(".xlsx", $vaOption['export_name']) ;
   } 
 
   if($orientation == "P") $orientation = "portrait" ;
@@ -540,9 +532,9 @@ function ezPRVTcleanUp(){
 function ezStream($options=''){
   if($this->nExport == 0){
     $this->ezPRVTcleanUp();
-    $this->stream($options);
+    $this->stream($options);  
   }else if($this->nExport == 1){
-    echo('<a href="' . $this->cFileCSV . '" style="text-align:center">Click Here</a> to download file CSV') ;
+    echo('<a href="' . $this->cfileexport . '" style="text-align:center">Click Here</a> to download file CSV') ;
   } else if($this->nExport == 2){
     //AUTO SIZE
     $col = 'A';
@@ -552,12 +544,12 @@ function ezStream($options=''){
         if($tempCol == $this->objPHPExcel->getActiveSheet()->getHighestDataColumn()){ 
             break;
         }
-    }
+    } 
     //******
 
     $objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel2007');
-    $objWriter->save($this->cFileExcel); 
-    echo('<a href="' . $this->cFileExcel . '" style="text-align:center">Click Here</a> to download file XLSX') ;
+    $objWriter->save($this->cfileexport); 
+    echo('<a href="' . $this->cfileexport . '" style="text-align:center">Click Here</a> to download file XLSX') ;
   }
 }
 

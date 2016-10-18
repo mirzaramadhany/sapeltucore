@@ -348,7 +348,7 @@ scOSX.OpenReport 		= function(oObj,lConfig,cData,cEncrypt){
 				cJs 		: "module/ajaxload/rpt&scRpt="+ oObj +"&" + cData ,
 				cFormName	: "sc_report",    
 				nWidth 		: 550 ,   
-				nHeight 	: 300 , 
+				nHeight 	: 250 , 
 				cIcon 		: 'fa fa-file' ,
 				lDock 		: false, 
 				lModal		: true,
@@ -370,20 +370,19 @@ scOSX.OpenReport 		= function(oObj,lConfig,cData,cEncrypt){
 		},1) ;
 	}
 }
+
+scOSX.SetProgressBar	= function(obj,nstart,nend){
+	scOSX.nEt   = parseFloat(100 / parseInt(nend)) ; 
+    scOSX.nPro  = parseFloat(scOSX.nEt*nstart) ;  
+    scOSX.nPro  = Math.min(scOSX.nPro,100) ; 
+
+    obj.attr("aria-valuenow",scOSX.nPro) ; 
+    obj.css("width",scOSX.nPro + "%") ;  
+    obj.html('<span class="sr-only">'+parseInt(scOSX.nPro) +'%</span>') ;
+}
+
+
  
-scOSX.ProgressReport	= function(oObj,nLimit,nStart,nEnd){
-    var nEt   = parseFloat(100 / parseInt(nEnd)) ; 
-    var nPro  = parseFloat(nEt*nLimit*nStart) ;  
-    nPro      = Math.min(nPro,100) ; 
-
-    oObj.find(".progress-bar").attr("aria-valuenow",nPro) ; 
-    oObj.find(".progress-bar").css("width",nPro + "%") ;   
-    oObj.find(".progress-bar").html( parseInt(nPro) + "%") ; 
-}   
-
-/*<div class="icon-circle" style="background-color:#34495e">
-        <i class="fa fa-cloud transition"></i>
-    </div>*/
 scOSX.nDock 			= 0 ; 
 scOSX.AddDock			= function(cID,cIcon,cTitle){
 	if(scOSX.nDock < 10){
