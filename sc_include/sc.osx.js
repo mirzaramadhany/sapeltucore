@@ -505,6 +505,13 @@ scOSX.LoadPage 	= function(cID,cPage,cParam,lReport){
 	//$("#"+cID).trigger("onLoad") ; 
 }   
 
+scOSX.openformuri	= function(cjson){
+	if(cjson !== ''){
+        cjson       = JSON.parse( decodeURIComponent( (cjson+'').replace(/\+/g, '%20') ) ); 
+        scOSX.Form(cjson) ;        
+    }
+} 
+
 
 /*costanta*/
 var constant	= {} ; 
