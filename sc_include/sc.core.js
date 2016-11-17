@@ -84,7 +84,7 @@ function scAjax(cPar,cFunction,cData,oButtonId,cDataType,cUrl){
 	if(cUrl == undefined) cUrl 				= $component_page ;
 	$.ajax({
 		type	    : "POST" ,
-		headers		: { "__SISTEM_BY":"SAPELTUCREATIVEID"},
+		headers		: { "__SISTEM_BY":"BismillahSuksesTeam"},
 		url			: cUrl ,   
  		data	    : "cPar=" + cPar + "&cFunction=" + cFunction + '&' + cData,
 		dataType 	: cDataType , 
