@@ -348,9 +348,9 @@ scOSX.OpenReport 		= function(oObj,lConfig,cData,cEncrypt){
 				cJs 		: "module/ajaxload/rpt&scRpt="+ oObj +"&" + cData ,
 				cFormName	: "sc_report",    
 				nWidth 		: 550 ,   
-				nHeight 	: 250 , 
+				nHeight 	: 300 , 
 				cIcon 		: 'fa fa-file' ,
-				lDock 		: false, 
+				lDock 		: false,  
 				lModal		: true,
 				lHelp		: false
 			}) ; 
