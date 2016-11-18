@@ -68,14 +68,14 @@ function Export2Excel($vaArray,$lShowHeader=true){
   foreach($vaArray as $key=>$value){
     if($lFirst && $lShowHeader){
       foreach($value as $key1=>$value1){
-        if(trim($this->getText($key1)) !== "") $this->objPHPExcel->getActiveSheet()->setCellValue($this->nColExcel++.$this->nRowExcel,$this->getText($key1)) ;
+        $this->objPHPExcel->getActiveSheet()->setCellValue($this->nColExcel++.$this->nRowExcel,$this->getText($key1)) ;
       } 
       $this->nColExcel = "A" ;
       $this->nRowExcel ++ ;
       $lFirst = false ; 
     }
     foreach($value as $key1=>$value1){
-      if(trim($this->getText($value1)) !== "") $this->objPHPExcel->getActiveSheet()->setCellValue($this->nColExcel++.$this->nRowExcel,$this->getText($value1)) ;
+      $this->objPHPExcel->getActiveSheet()->setCellValue($this->nColExcel++.$this->nRowExcel,$this->getText($value1)) ;
     }  
     $this->nColExcel = "A" ;
     $this->nRowExcel ++ ; 
