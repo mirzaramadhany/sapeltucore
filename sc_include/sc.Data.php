@@ -133,7 +133,7 @@ class myDb extends PDO {
  
 					if(!empty($dbRow) and is_array($dbRow)){
 						foreach($dbRow as $cKey => $cValue){
-							$dbRow[$cKey]	= stripslashes(trim($this->UTF8Please($cValue) )) ; 	
+							$dbRow[$cKey]	= stripslashes(trim($this->UTF8Please($cValue,true) )) ; 	
 						}  
 					} 
 					return $dbRow ;   
@@ -266,13 +266,13 @@ class myDb extends PDO {
 	}
 
 	public function UTF8Please($text,$lEncode=false){
-		if($lEncode) $text 	= utf8_encode($text) ; 
+		//if($lEncode) $text 	= utf8_encode($text) ; 
 		//return iconv(mb_detect_encoding($text, mb_detect_order(), true), "UTF-8", $text);
-		/*if($lEncode){
+		if($lEncode){
 			$text 	= utf8_encode($text) ; 
 		}else{
 			$text 	= utf8_decode($text) ;			
-		}*/
+		}
 
 		return $text ; 
 	}  
