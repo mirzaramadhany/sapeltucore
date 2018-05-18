@@ -19,10 +19,11 @@ class myDb extends PDO {
 
 	public function Connect($cHost,$cUser,$cPassword,$cDb,$cEngine="mysql",$cPort="3306"){
 		try {
-			$cDNS	= $cEngine . ":dbname=" . $cDb . ";host=" . $cHost . ";port=" . $cPort ; 
-			parent::__construct($cDNS, $cUser , $cPassword ) ; 
+			$cDNS	= $cEngine . ":dbname=" . $cDb . ";charset=UTF-8;host=" . $cHost . ";port=" . $cPort ; 
+			parent::__construct($cDNS, $cUser , $cPassword, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8")) ; 
 			parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    		parent::setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    		       	parent::setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+			parent::exec("SET CHARACTER SET utf8");
     		
 			$this->cLog  		= GetSession("SYS_Log") ;
 			$this->lShowError 	= GetSession("SYS_ShowError") !== "" ? GetSession("SYS_ShowError") : true ;
